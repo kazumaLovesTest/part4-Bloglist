@@ -1,10 +1,11 @@
-require('dotenv').config()
 const http = require('http')
 const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const logger = require('./utils/logger')
+const config = require('./utils/config')
+
 const blogSchema = new mongoose.Schema({
   title: String,
   author: String,
@@ -14,10 +15,9 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model('Blog', blogSchema)
 
-const mongoUrl = process.env.MONGODB_URI
-mongoose.connect(mongoUrl)
+mongoose.connect(config.mongoUrl)
         .then(()=>{
-          logger.info('connection esablished with',mongoUrl)
+          logger.info('connection esablished with',config.mongoUrl)
         })
         .catch((error)=>{
           logger.error('couldnt esablish connection because of',error)
@@ -43,7 +43,7 @@ app.post('/api/blogs', (request, response) => {
     })
 })
 
-const PORT = 3003
+const PORT = config.PORT || 3003
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
