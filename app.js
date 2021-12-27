@@ -1,3 +1,4 @@
+require('express-async-errors')
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
@@ -6,7 +7,9 @@ const logger = require('./utils/logger')
 const config = require('./utils/config')
 const blogRoute = require('./controller/blog')
 
-mongoose.connect(config.mongoUrl)
+app.use(express.json())
+
+mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     logger.info('connection esablished with', config.mongoUrl)
   })
