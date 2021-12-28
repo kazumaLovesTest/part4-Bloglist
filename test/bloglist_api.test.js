@@ -27,6 +27,7 @@ describe('When all blogs are initialised', () => {
       const response = await api.get('/api/blogs')
       expect(response.body).toHaveLength(initialBlogs.length)
     }, 100000)
+
     test('unique identifier property of the blog posts is named id', async () => {
       const response = await api.get('/api/blogs')
       expect(response.body[0].id).toBeDefined()
@@ -57,6 +58,7 @@ describe('When all blogs are initialised', () => {
       author: 'seth',
       likes: 5
     }
+
     test('blog is added to database', async () => {
       await api.post('/api/blogs')
         .send(newBlog)
@@ -105,6 +107,7 @@ describe('When all blogs are initialised', () => {
     })
   })
 })
+
 describe('when there is initially one user in the db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
@@ -117,6 +120,7 @@ describe('when there is initially one user in the db', () => {
     })
     await user.save()
   }, 100000)
+
   test('the users are returned', async () => {
     const initialUsers = await getUsersInDb()
 
@@ -126,6 +130,7 @@ describe('when there is initially one user in the db', () => {
 
     expect(usersInDb.body).toHaveLength(initialUsers.length)
   })
+
   test('creation succedes with fresh new user', async () => {
     const initialUsers = await getUsersInDb()
     const user = {
@@ -144,6 +149,7 @@ describe('when there is initially one user in the db', () => {
     const userNames = usersInDb.map(user => user.userName)
     expect(userNames).toContain(user.userName)
   })
+
   test('creation fails if username is taken with the appropriate status code', async () => {
     const initialUsers = await getUsersInDb()
 
@@ -160,6 +166,37 @@ describe('when there is initially one user in the db', () => {
 
     const usersInDb = await getUsersInDb()
     expect(usersInDb).toHaveLength(initialUsers.length)
+  })
+
+  test('creation fails if userName is short', async () => {
+    const initialUsers = await getUsersInDb()
+    const userWithShortUserName = {
+      userName: 'ki',
+      name: 'Eleni',
+      password: 'flower'
+    }
+    await api.post('/api/users')
+      .send(userWithShortUserName)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    const usersInDb = await getUsersInDb()
+    expect(usersInDb).toHaveLength(initialUsers.length)
+  })
+
+  test.only('creation fails if passowrd is too small', async () => {
+    const initialUsers = await getUsersInDb()
+    const userWithShortPassword = {
+      userName: 'kilio',
+      name: 'Eleni',
+      password: 'flower'
+    }
+    await api.post('/api/users')
+      .send(userWithShortPassword)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    const usersInDb = await getUsersInDb()
+    expect(usersInDb).toHaveLength(initialUsers.length)
+
   })
 })
 afterAll(() => {
