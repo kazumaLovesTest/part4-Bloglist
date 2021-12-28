@@ -66,6 +66,7 @@ describe('When all blogs are initialised', () => {
       const urlLists = blogsInDb.map(blog => blog.url)
       expect(urlLists).toContain(newBlog.url)
     }, 100000)
+
     test('if the like attribute is not given it wil default to zero', async () => {
       await api.post('/api/blogs')
         .send(blogWithNoLikes)
@@ -74,6 +75,7 @@ describe('When all blogs are initialised', () => {
       const blogAtEnd = blogsInDb[blogsInDb.length - 1]
       expect(blogAtEnd.likes).toBe(0)
     })
+
     test('if title and url are missing respond with a bad request', async () => {
       await api.post('/api/blogs')
         .send(blogWithNoUrl)
@@ -120,13 +122,13 @@ describe('when there is initially one user in the db', () => {
 
     const usersInDb = await api.get('/api/users')
       .expect(200)
-      .expect('Content-Type',/application\/json/)
+      .expect('Content-Type', /application\/json/)
 
     expect(usersInDb.body).toHaveLength(initialUsers.length)
   })
   test('creation succedes with fresh new user', async () => {
     const initialUsers = await getUsersInDb()
-    const user ={
+    const user = {
       userName: 'ThePower',
       name: 'Eleni',
       password: 'water'

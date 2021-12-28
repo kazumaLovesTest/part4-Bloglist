@@ -10,17 +10,18 @@ blogRoute.get('/', async (request, response) => {
 blogRoute.post('/', async (request, response) => {
   const body = request.body
 
-  const user = await User.findById(body.userid)
-
-  const blog = new Blog({ ...body, user: user._id })
-
-  if (!blog.url || !blog.title)
+  if (!body.url || !body.title)
     response.status(400).end()
-  if (!blog.likes)
-    blog.likes = 0
+  if (!body.likes)
+    body.likes = 0
 
-  await blog.save()
-  response.status(201).json(blog)
+  const user = await User.findById(body.userId)
+  const blog = new Blog({ ...body, user: user._id })
+  const savedBlog = await blog.save()
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
+
+  response.status(201).json(savedBlog)
 })
 
 blogRoute.delete('/:id', async (request, response) => {
