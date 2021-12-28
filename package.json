@@ -20,11 +20,13 @@
   },
   "homepage": "https://github.com/kazumaneet/part4-Bloglist#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "express-async-errors": "^3.1.1",
     "mongoose": "^6.1.2",
+    "mongoose-unique-validator": "^3.0.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15"
   },
