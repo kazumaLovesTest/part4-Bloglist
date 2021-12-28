@@ -7,6 +7,7 @@ const logger = require('./utils/logger')
 const config = require('./utils/config')
 const blogRoute = require('./controller/blog')
 const userRoute = require('./controller/user')
+const loginRoute = require('./controller/login')
 
 app.use(express.json())
 
@@ -19,6 +20,7 @@ mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: t
   })
 app.use(cors())
 app.use(express.json())
+app.use('/api/login',loginRoute)
 app.use('/api/blogs',blogRoute)
 app.use('/api/users',userRoute)
 module.exports = app

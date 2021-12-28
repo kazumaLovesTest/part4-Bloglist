@@ -16,6 +16,7 @@ describe('When all blogs are initialised', () => {
     const promiseArray = blogObjects.map(blog => blog.save())
     await Promise.all(promiseArray)
   }, 100000)
+
   describe('Getting', () => {
     test('blogs are returned as json', async () => {
       await api.get('/api/blogs')
@@ -136,7 +137,7 @@ describe('when there is initially one user in the db', () => {
     const user = {
       userName: 'ThePower',
       name: 'Eleni',
-      password: 'water'
+      password: 'waterfdaf'
     }
     await api.post('/api/users')
       .send(user)
@@ -183,7 +184,7 @@ describe('when there is initially one user in the db', () => {
     expect(usersInDb).toHaveLength(initialUsers.length)
   })
 
-  test.only('creation fails if passowrd is too small', async () => {
+  test('creation fails if passowrd is too small', async () => {
     const initialUsers = await getUsersInDb()
     const userWithShortPassword = {
       userName: 'kilio',
@@ -199,6 +200,42 @@ describe('when there is initially one user in the db', () => {
 
   })
 })
+describe('Logging', () => {
+
+  beforeEach(async () => {
+    await User.deleteMany({})
+    const user = {
+      userName: 'ThePower',
+      name: 'Eleni',
+      password: 'waterfdaf'
+    }
+    await api.post('/api/users').send(user)
+  },100000)
+  test('succeds if userName and password matches', async () => {
+    const user = {
+      userName: 'ThePower',
+      name: 'Eleni',
+      password: 'waterfdaf'
+    }
+
+    await api.post('/api/login')
+      .send(user)
+      .expect(200)
+  },100000)
+
+  test('fails if userName and password dont match', async () => {
+    const user = {
+      userName: 'ThePower',
+      name: 'Eleni',
+      password: 'water'
+    }
+
+    await api.post('/api/login')
+      .send(user)
+      .expect(401)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
