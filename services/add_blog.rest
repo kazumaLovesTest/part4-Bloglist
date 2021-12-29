@@ -1,9 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImthenVtYSIsImlkIjoiNjFjYzE1ZjNkNjQ0OGEzNDVjZGMyYzFjIiwiaWF0IjoxNjQwNzY2MjcyfQ.Tcs5aAvZ4Eb4TK7AoOcVjkT4OGxNyV45jWxq5d54rhQ
 
 {
   "title":"seth's blog",
   "author":"seth",
   "url": "https://seths.blog/",
-  "userId": "61cb34f41fe3d9134889afcf"
+  "userId": "61cc15f3d6448a345cdc2c1c"
 }

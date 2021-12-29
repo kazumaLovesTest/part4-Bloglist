@@ -1,20 +1,21 @@
-const userRoute = require('express').Router()
+const userRouter = require('express').Router()
 const bcrypt = require('bcrypt')
 const User = require('../model/user')
 
-userRoute.get('/', async (request, response) => {
+userRouter.get('/', async (request, response) => {
   const users = await User.find({}).populate('blogs', { user: 0 })
 
   response.json(users)
 })
 
-userRoute.post('/', async (request, response) => {
+userRouter.post('/', async (request, response) => {
   const body = request.body
 
   if (body.userName.length < 3 || body.password.length < 8)
     response.status(400).json({
       error:'validation error. Too small'
-    }).end()
+    })
+
   const saltRound = 10
   const passwordHash = await bcrypt.hash(body.password, saltRound)
 
@@ -24,5 +25,9 @@ userRoute.post('/', async (request, response) => {
   response.status(201).json(savedUser)
 })
 
+userRouter.delete('/:id', async (request,response) => {
+  await User.findByIdAndRemove(request.params.id)
+  response.status(204).end()
+})
 
-module.exports = userRoute
+module.exports = userRouter
