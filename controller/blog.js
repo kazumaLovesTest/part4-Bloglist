@@ -11,11 +11,10 @@ blogRouter.get('/', async (request, response) => {
 
 blogRouter.post('/', async (request, response) => {
   const body = request.body
-  console.log(request.token)
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id)
     response.status(401).json({
-      error:'invalid token'
+      error: 'invalid token'
     })
   if (!body.url || !body.title)
     response.status(400).end()
@@ -32,11 +31,19 @@ blogRouter.post('/', async (request, response) => {
 })
 
 blogRouter.delete('/:id', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  const userId = decodedToken.id
+
+  if (userId.toString() !== blog.user.toString())
+    response.status(401).json({
+      error: 'invalid authorization'
+    })
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })
 
-blogRouter.delete('/',async(request,response) => {
+blogRouter.delete('/', async (request, response) => {
   await Blog.deleteMany({})
   response.status(204).end()
 })
