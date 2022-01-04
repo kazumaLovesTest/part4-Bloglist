@@ -11,7 +11,7 @@ userRouter.get('/', async (request, response) => {
 userRouter.post('/', async (request, response) => {
   const body = request.body
 
-  if (body.userName.length < 3 || body.password.length < 8)
+  if (body.username.length < 3 || body.password.length < 8)
     response.status(400).json({
       error:'validation error. Too small'
     })

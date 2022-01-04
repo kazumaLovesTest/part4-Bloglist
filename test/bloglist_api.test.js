@@ -115,7 +115,7 @@ describe('when there is initially one user in the db', () => {
 
     const passwordHash = await bcrypt.hash('secret', 10)
     const user = new User({
-      userName: 'Kazuma',
+      username: 'Kazuma',
       name: 'Mekbib',
       passwordHash
     })
@@ -135,7 +135,7 @@ describe('when there is initially one user in the db', () => {
   test('creation succedes with fresh new user', async () => {
     const initialUsers = await getUsersInDb()
     const user = {
-      userName: 'ThePower',
+      username: 'ThePower',
       name: 'Eleni',
       password: 'waterfdaf'
     }
@@ -147,21 +147,21 @@ describe('when there is initially one user in the db', () => {
     const usersInDb = await getUsersInDb()
     expect(usersInDb).toHaveLength(initialUsers.length + 1)
 
-    const userNames = usersInDb.map(user => user.userName)
-    expect(userNames).toContain(user.userName)
+    const usernames = usersInDb.map(user => user.username)
+    expect(usernames).toContain(user.username)
   })
 
   test('creation fails if username is taken with the appropriate status code', async () => {
     const initialUsers = await getUsersInDb()
 
-    const userWithUserNameTaken = {
-      userName: 'Kazuma',
+    const userWithusernameTaken = {
+      username: 'Kazuma',
       name: 'tarekegn',
       password: 'flower'
     }
 
     await api.post('/api/users')
-      .send(userWithUserNameTaken)
+      .send(userWithusernameTaken)
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
@@ -169,15 +169,15 @@ describe('when there is initially one user in the db', () => {
     expect(usersInDb).toHaveLength(initialUsers.length)
   })
 
-  test('creation fails if userName is short', async () => {
+  test('creation fails if username is short', async () => {
     const initialUsers = await getUsersInDb()
-    const userWithShortUserName = {
-      userName: 'ki',
+    const userWithShortusername = {
+      username: 'ki',
       name: 'Eleni',
       password: 'flower'
     }
     await api.post('/api/users')
-      .send(userWithShortUserName)
+      .send(userWithShortusername)
       .expect(400)
       .expect('Content-Type', /application\/json/)
     const usersInDb = await getUsersInDb()
@@ -187,7 +187,7 @@ describe('when there is initially one user in the db', () => {
   test('creation fails if passowrd is too small', async () => {
     const initialUsers = await getUsersInDb()
     const userWithShortPassword = {
-      userName: 'kilio',
+      username: 'kilio',
       name: 'Eleni',
       password: 'flower'
     }
@@ -205,15 +205,15 @@ describe('Logging', () => {
   beforeEach(async () => {
     await User.deleteMany({})
     const user = {
-      userName: 'ThePower',
+      username: 'ThePower',
       name: 'Eleni',
       password: 'waterfdaf'
     }
     await api.post('/api/users').send(user)
   },100000)
-  test('succeds if userName and password matches', async () => {
+  test('succeds if username and password matches', async () => {
     const user = {
-      userName: 'ThePower',
+      username: 'ThePower',
       name: 'Eleni',
       password: 'waterfdaf'
     }
@@ -223,9 +223,9 @@ describe('Logging', () => {
       .expect(200)
   },100000)
 
-  test('fails if userName and password dont match', async () => {
+  test('fails if username and password dont match', async () => {
     const user = {
-      userName: 'ThePower',
+      username: 'ThePower',
       name: 'Eleni',
       password: 'water'
     }
