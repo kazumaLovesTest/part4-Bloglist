@@ -1,0 +1,11 @@
+PUT http://localhost:3003/api/blogs/61cddeca22754a3e3b2c2079
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImthenVtYSIsImlkIjoiNjFjYzE1ZjNkNjQ0OGEzNDVjZGMyYzFjIiwiaWF0IjoxNjQwNzY2MjcyfQ.Tcs5aAvZ4Eb4TK7AoOcVjkT4OGxNyV45jWxq5d54rhQ
+
+{
+  "title":"seth's blog",
+  "author":"seth",
+  "url": "https://seths.blog/",
+  "userId": "61cdde0b22754a3e3b2c206d",
+  "likes":6
+}

@@ -26,7 +26,8 @@ blogRouter.post('/',middleware.userExtractor, async (request, response) => {
 })
 
 blogRouter.delete('/:id',middleware.userExtractor,async (request, response) => {
-  const blog = await Blog.findById(request.params.id)
+  const id = request.params.id
+  const blog = await Blog.findById(id)
   const user = request.user
 
   if (user.id.toString() !== blog.user.toString())
@@ -42,6 +43,10 @@ blogRouter.put('/:id', middleware.userExtractor,async (request, response) => {
   const body = request.body
   const user = request.user
 
+  if (user.id.toString() !== body.userId.toString())
+    response.status(401).json({
+      error: 'invalid authorization'
+    })
   const updatedBlog = await Blog.findByIdAndUpdate(id, body, { new: true })
   response.json(updatedBlog.toJSON())
 })
