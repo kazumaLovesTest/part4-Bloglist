@@ -16,7 +16,7 @@ const userExtractor = (async (request, response, next) => {
     response.status(401).json({
       error: 'invalid token'
     })
-  const user = await User.findOne(decodedToken.username)
+  const user = await User.findOne(decodedToken)
   request.user = user.toJSON()
   next()
 })
