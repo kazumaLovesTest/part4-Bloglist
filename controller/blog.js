@@ -1,6 +1,6 @@
 const blogRouter = require('express').Router()
 const Blog = require('../model/blog')
-const middleware = require ('../utils/middleware')
+const middleware = require('../utils/middleware')
 
 
 blogRouter.get('/', async (request, response) => {
@@ -8,7 +8,7 @@ blogRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
 
-blogRouter.post('/',middleware.userExtractor, async (request, response) => {
+blogRouter.post('/', middleware.userExtractor, async (request, response) => {
   const body = request.body
 
   if (!body.url || !body.title)
@@ -25,7 +25,7 @@ blogRouter.post('/',middleware.userExtractor, async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
-blogRouter.delete('/:id',middleware.userExtractor,async (request, response) => {
+blogRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
   const id = request.params.id
   const blog = await Blog.findById(id)
   const user = request.user
@@ -34,20 +34,26 @@ blogRouter.delete('/:id',middleware.userExtractor,async (request, response) => {
     response.status(401).json({
       error: 'invalid authorization'
     })
+
+  user.blogs = user.blogs.filter(_id => _id.toString() === blog._id.toString()?false:true)
+  await user.save()
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })
 
-blogRouter.put('/:id', middleware.userExtractor,async (request, response) => {
+blogRouter.put('/:id', middleware.userExtractor, async (request, response) => {
   const id = request.params.id
   const body = request.body
+  const blogIndb = await Blog.findById(body.id)
   const user = request.user
 
-  if (user.id.toString() !== body.userId.toString())
+  if (user.id.toString() !== blogIndb.user.toString())
     response.status(401).json({
       error: 'invalid authorization'
-    })
+    }).end()
+
   const updatedBlog = await Blog.findByIdAndUpdate(id, body, { new: true })
   response.json(updatedBlog.toJSON())
 })
+
 module.exports = blogRouter

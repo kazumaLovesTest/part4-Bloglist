@@ -6,5 +6,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6Imthe
   "title":"seth's blog",
   "author":"seth",
   "url": "https://seths.blog/",
-  "userId": "61cc15f3d6448a345cdc2c1c"
+  "user": "61cc15f3d6448a345cdc2c1c"
 }
