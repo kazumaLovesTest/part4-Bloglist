@@ -11,8 +11,10 @@ blogRouter.get('/', async (request, response) => {
 blogRouter.post('/', middleware.userExtractor, async (request, response) => {
   const body = request.body
 
-  if (!body.url || !body.title)
-    response.status(400).end()
+  if (!body.url || !body.title) {
+    return response.status(400).end()
+  }
+
   if (!body.likes)
     body.likes = 0
 
@@ -31,11 +33,11 @@ blogRouter.delete('/:id', middleware.userExtractor, async (request, response) =>
   const user = request.user
 
   if (user.id.toString() !== blog.user.toString())
-    response.status(401).json({
+    return response.status(401).json({
       error: 'invalid authorization'
     })
 
-  user.blogs = user.blogs.filter(_id => _id.toString() === blog._id.toString()?false:true)
+  user.blogs = user.blogs.filter(_id => _id.toString() === blog._id.toString() ? false : true)
   await user.save()
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
@@ -48,7 +50,7 @@ blogRouter.put('/:id', middleware.userExtractor, async (request, response) => {
   const user = request.user
 
   if (user.id.toString() !== blogIndb.user.toString())
-    response.status(401).json({
+    return response.status(401).json({
       error: 'invalid authorization'
     }).end()
 
