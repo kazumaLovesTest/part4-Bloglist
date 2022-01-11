@@ -20,14 +20,16 @@ mongoose.connect(config.mongoUrl, { useNewUrlParser: true, useUnifiedTopology: t
     logger.error('couldnt esablish connection because of', error)
   })
 
+
 app.use(cors())
 app.use(express.json())
 app.use(middleware.tokenExtractor)
+app.use(express.static('build'))
 app.use('/api/login', loginRouter)
 app.use('/api/blogs', blogRouter)
 app.use('/api/users', userRouter)
 
-if(process.env.NODE_ENV === 'test'){
+if (process.env.NODE_ENV === 'test') {
   const resetRouter = require('./controller/reset')
   app.use('/api/testing', resetRouter)
 }
