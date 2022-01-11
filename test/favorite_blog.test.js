@@ -77,7 +77,6 @@ describe('Favoite Blog', () => {
   test('of many blogs retuning the blog with most likes', () => {
     const result = favoriteBlog([...listWithManyBlogs])
     const blog = listWithManyBlogs[2]
-    console.log(blog)
     expect(result).toEqual(blog)
   })
 })
